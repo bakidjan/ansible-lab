@@ -1,0 +1,37 @@
+Vagrant.configure("2") do |config|  
+#  config.vm.provider "virtualbox"
+  config.vm.provider "virtualbox" do |v|
+        v.customize ["modifyvm", :id, "--memory", "1024"]
+  end
+
+  config.vm.define "ansible" do |ansible|
+    ansible.vm.box = "generic/ubuntu2004"
+    ansible.vm.hostname = "ansible"
+    ansible.vm.network :private_network, ip: "192.168.201.10"
+  end
+
+  config.vm.define "host1" do |host1|
+    host1.vm.box = "generic/ubuntu2004"
+    host1.vm.hostname = "ubuntu20"
+    host1.vm.network :private_network, ip: "192.168.201.11"
+  end
+
+  config.vm.define "host2" do |host2|
+    host2.vm.box = "centos/7"
+    host2.vm.hostname = "centos7"
+    host2.vm.network :private_network, ip: "192.168.201.12"
+  end
+
+  config.vm.define "host3" do |host3|
+    host3.vm.box = "Microsoft/EdgeOnWindows10"
+    host3.vm.hostname = "windows10"
+    host3.vm.network :private_network, ip: "192.168.201.13"
+  end
+
+  config.vm.provision "shell", inline: <<-SHELL
+    sudo systemctl disable systemd-resolved
+    sudo rm -rf /etc/run/systemd/resolve/stub-resolv.conf /etc/resolv.conf
+    sudo echo "nameserver  8.8.8.8" > /etc/resolv.conf
+  SHELL
+
+end
