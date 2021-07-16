@@ -1,2 +1,4 @@
 .vagrant
-playbook1.yml
+playbook1.yml*
+inventory
+*.j2
