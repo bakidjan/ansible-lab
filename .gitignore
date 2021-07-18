@@ -2,5 +2,8 @@
 playbook1.yml*
 inventory
 *.j2
+db1.sql
+nginx.conf
 Vagrantfile.old
+
 
