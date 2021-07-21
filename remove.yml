@@ -1,0 +1,42 @@
+- name: playbook1
+  hosts: all
+  become: true
+  gather_facts: true
+  vars:
+    Titre: Formation Ansible
+    Info:
+      - Brahim Hamdi
+      - brahim.hamdi.consult@gmail.com
+      - formateur
+    db_ip: "192.168.201.12"
+    db_user: "root"
+    db_pass: ""
+
+  tasks:
+    - name: tâches à appliquer sur groupe web
+      block:
+        - name: dé-installer les paquets
+          apt:
+            name: ['nginx','mariadb-client','php-mbstring','php-fpm','php-xml','php-intl','php-mysql','net-tools']
+            state: absent
+          tags: paquets
+        - name: chercher .html
+          command: find /var/www/html -iname "*.html"
+          register: html_trouvé
+        - name: sauvegarder .html
+          command: mv {{ item }}.org {{ item }}
+          with_items: 
+          - "{{ html_trouvé.stdout_lines }}" 
+        - name: appliquer template
+          command: rm /etc/nginx/sites-enabled/default /var/www/html/index.php
+      when: ansible_os_family=='Debian'
+    - name: tâches à appliquer sur groupe db
+      block:
+        - name: dé-installer mariadb, mysql-python et net-tools
+          yum:
+            name: 
+            - mariadb-server
+            - net-tools
+            - MySQL-python
+            state: absent
+      when: ansible_os_family=='RedHat'
