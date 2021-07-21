@@ -26,7 +26,6 @@ Vagrant.configure("2") do |config|
     sudo systemctl disable systemd-resolved
     sudo rm -rf /etc/run/systemd/resolve/stub-resolv.conf /etc/resolv.conf
     sudo echo "nameserver  8.8.8.8" > /etc/resolv.conf
-    sudo apt update
   SHELL
 
 end
