@@ -6,5 +6,6 @@ db1.sql
 nginx.conf
 Vagrantfile.old
 remove.yml
+role*
 
 
